@@ -19,6 +19,7 @@ const TextAreaWrap = styled.div`
 
 const StyledTextArea = styled.textarea`
   width: 100%;
+  resize: none;
 `
 
 export const TextArea = ({ name, value, onChange, className }: Props): JSX.Element => {

@@ -1,6 +1,11 @@
 import React, { useCallback, useState } from 'react'
 import styled from 'styled-components'
 
+type Props = {
+  onParseClick: () => void
+  onClearClick: () => void
+}
+
 const Wrap = styled.div`
   display: flex;
   flex-direction: column;
@@ -10,10 +15,11 @@ const Wrap = styled.div`
   min-width: 100px;
 `
 
-export const Controls = (): JSX.Element => {
+export const Controls = ({ onParseClick, onClearClick }: Props): JSX.Element => {
   return (
     <Wrap>
-      <button>parse</button>
+      <button onClick={onParseClick}>parse</button>
+      <button onClick={onClearClick}>clear</button>
     </Wrap>
   )
 }

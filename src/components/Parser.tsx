@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { TextArea } from './TextArea'
 import { ParsedBox } from './ParsedBox'
 import { Controls } from './Controls'
+import { mockJson } from '../assets/mockJson'
 
 const ParserWrap = styled.div`
   display: flex;
@@ -18,13 +19,23 @@ const ParserWrap = styled.div`
 `
 
 export const Parser = (): JSX.Element => {
-  const [json, setJson] = useState('')
+  const [json, setJson] = useState(mockJson)
   const handleSetJson = useCallback((e) => setJson(e.target.value), [])
+  const [jsonOutput, setJsonOutput] = useState('')
+
+  const handleParseClick = useCallback(() => {
+    setJsonOutput(JSON.stringify(JSON.parse(mockJson)))
+  }, [])
+  const handleClearClick = useCallback(() => {
+    setJson(mockJson)
+    setJsonOutput('')
+  }, [])
+
   return (
     <ParserWrap>
       <TextArea name="jsonInput" onChange={handleSetJson} value={json} />
-      <Controls />
-      <ParsedBox name="jsonOutput" value={json} />
+      <Controls onParseClick={handleParseClick} onClearClick={handleClearClick} />
+      <ParsedBox name="jsonOutput" value={jsonOutput} />
     </ParserWrap>
   )
 }

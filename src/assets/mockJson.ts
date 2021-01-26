@@ -10,7 +10,10 @@ export const mockJson =
   '    "age": 27,\n' +
   '    "eyeColor": "blue",\n' +
   '    "name": "Amber Chambers",\n' +
-  '    "gender": "female",\n' +
+  '    "gender": {\n' +
+  '        "id": 2,\n' +
+  '        "name": "Jenna Blake"\n' +
+  '      },\n' +
   '    "company": "FRANSCENE",\n' +
   '    "email": "amberchambers@franscene.com",\n' +
   '    "phone": "+1 (951) 503-3462",\n' +

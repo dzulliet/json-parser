@@ -24,7 +24,7 @@ export const Parser = (): JSX.Element => {
   const [jsonOutput, setJsonOutput] = useState('')
 
   const handleParseClick = useCallback(() => {
-    setJsonOutput(JSON.stringify(JSON.parse(mockJson)))
+    setJsonOutput(JSON.parse(mockJson))
   }, [])
   const handleClearClick = useCallback(() => {
     setJson(mockJson)
@@ -35,7 +35,7 @@ export const Parser = (): JSX.Element => {
     <ParserWrap>
       <TextArea name="jsonInput" onChange={handleSetJson} value={json} />
       <Controls onParseClick={handleParseClick} onClearClick={handleClearClick} />
-      <ParsedBox name="jsonOutput" value={jsonOutput} />
+      <ParsedBox name="jsonOutput" parsedJson={jsonOutput} />
     </ParserWrap>
   )
 }

@@ -16,19 +16,29 @@ const Wrap = styled.div`
 `
 
 const StyledDiv = styled.div`
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
   min-width: 200px;
   min-height: 200px;
   background-color: white;
+  overflow: auto;
+  max-height: calc(100vh - 8rem);
+`
+const StyledPre = styled.pre`
+  margin: 0;
+`
+
+const StyledSpan = styled.span`
+  margin-left: 30px;
 `
 
 const formatValue = (value: any) => {
   let formattedValue
   if (typeof value === 'string') {
-    formattedValue = <span>{`"${value}",\n`}</span>
+    formattedValue = <span>{`"${value.trim()}",\r\n`}</span>
   } else if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
-    formattedValue = <span>{`${value},\n`}</span>
+    formattedValue = <span>{`${value},\r\n`}</span>
   } else if (typeof value === 'object') {
     formattedValue = beautify(value)
   }
@@ -40,75 +50,38 @@ const beautify = (parsedJson?: any): JSX.Element => {
   if (Array.isArray(parsedJson)) {
     formattedJson = (
       <>
-        <div>{`[`}</div>
-        {parsedJson.map((item) => {
-          let formattedValue
-          if (typeof item === 'string') {
-            formattedValue = <span>{`"${item}",\n`}</span>
-          } else if (typeof item === 'number' || typeof item === 'boolean' || item === null) {
-            formattedValue = <span>{`${item},\n`}</span>
-          } else if (typeof item === 'object') {
-            formattedValue = beautify(item)
-            // if (Array.isArray(item)) {
-            //   formattedValue = <div>{beautify(item)}</div>
-            // } else {
-            //   formattedValue = <div>{beautify(item)}</div>
-            // }
-          }
-          return formattedValue
-        })}
-        <div>{`]`}</div>
+        <span>{`[\r\n`}</span>
+        {parsedJson.map((item) => formatValue(item))}
+        <span>{`]\r\n`}</span>
       </>
     )
   } else if (typeof parsedJson === 'object' && parsedJson !== null) {
     formattedJson = (
       <>
-        <div>{`{`}</div>
+        <span>{`{\r\n`}</span>
         {Object.entries(parsedJson).map(([key, value]) => {
-          let formattedValue
-          if (typeof value === 'string') {
-            formattedValue = <span>{`"${value}",\n`}</span>
-          } else if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
-            formattedValue = <span>{`${value},\n`}</span>
-          } else if (typeof value === 'object') {
-            formattedValue = beautify(value)
-            // if (Array.isArray(value)) {
-            //   // formattedValue = (
-            //   //   <div>
-            //   //     <div>{`"${key}":`}</div>
-            //   //     {beautify(value)}
-            //   //   </div>
-            //   // )
-            // } else {
-            //   // formattedValue = (
-            //   //   <div>
-            //   //     <div>{`"${key}":`}</div>
-            //   //     {beautify(value)}
-            //   //   </div>
-            //   // )
-            // }
-          }
           return (
             // eslint-disable-next-line react/jsx-key
-            <>
+            <span>
               <span>{`"${key}": `}</span>
-              {formattedValue}
-            </>
+              {formatValue(value)}
+            </span>
           )
         })}
-        <div>{`}`}</div>
+        <span>{`}\r\n`}</span>
       </>
     )
   }
 
-  return <pre>{formattedJson}</pre>
-  // return <pre>{JSON.stringify(parsedJson, null, 2)}</pre>
+  return <span>{formattedJson}</span>
 }
 
 export const ParsedBox = ({ name, parsedJson, onChange, className }: Props): JSX.Element => {
   return (
     <Wrap>
-      <StyledDiv>{beautify(parsedJson)}</StyledDiv>
+      <StyledPre>
+        <StyledDiv>{beautify(parsedJson)}</StyledDiv>
+      </StyledPre>
     </Wrap>
   )
 }

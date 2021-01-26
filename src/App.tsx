@@ -1,19 +1,23 @@
-import React, { useCallback, useState } from 'react'
-import './App.css'
+import React from 'react'
+import { Parser } from './components/Parser'
+import styled from 'styled-components'
+
+const Page = styled.div`
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 3rem;
+  min-height: 100vh;
+  min-width: 300px;
+  background-color: lightblue;
+`
 
 const App = (): JSX.Element => {
-  const [json, setJson] = useState('')
-  const handleSetJson = useCallback((e) => setJson(e.target.value), [])
   return (
-    <div className="App">
-      <div className="parser">
-        <div className="textArea">
-          <textarea value={json} onChange={handleSetJson} />
-        </div>
-        <div className="controls">controls here</div>
-        <div className="parsedData">parsed data here</div>
-      </div>
-    </div>
+    <Page>
+      <Parser />
+    </Page>
   )
 }
 

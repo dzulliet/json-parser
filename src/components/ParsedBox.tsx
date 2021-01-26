@@ -30,7 +30,8 @@ const StyledPre = styled.pre`
 `
 
 const StyledSpan = styled.span`
-  margin-left: 30px;
+  display: block;
+  padding-left: 30px;
 `
 
 const formatValue = (value: any, delimiter = '') => {
@@ -40,7 +41,7 @@ const formatValue = (value: any, delimiter = '') => {
   } else if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
     formattedValue = <span>{`${value}${delimiter}\r\n`}</span>
   } else if (typeof value === 'object') {
-    formattedValue = <span>{beautify(value, delimiter)}</span>
+    formattedValue = beautify(value, delimiter)
   }
   return formattedValue
 }
@@ -53,7 +54,7 @@ const beautify = (parsedJson?: any, delimiter = ''): JSX.Element => {
         <span>{`[\r\n`}</span>
         {parsedJson.map((item, index) => {
           const delimiter = parsedJson.length - 1 === index ? '' : ','
-          return formatValue(item, delimiter)
+          return <StyledSpan key={index}>{formatValue(item, delimiter)}</StyledSpan>
         })}
         <span>{`]${delimiter}\r\n`}</span>
       </>
@@ -65,10 +66,10 @@ const beautify = (parsedJson?: any, delimiter = ''): JSX.Element => {
         {Object.entries(parsedJson).map(([key, value], index) => {
           const delimiter = Object.keys(parsedJson).length - 1 === index ? '' : ','
           return (
-            <span key={index}>
+            <StyledSpan key={index}>
               <span>{`"${key}": `}</span>
               {formatValue(value, delimiter)}
-            </span>
+            </StyledSpan>
           )
         })}
         <span>{`}${delimiter}\r\n`}</span>

@@ -1,5 +1,5 @@
-import React, { ChangeEvent, useCallback, useState } from 'react'
-import styled, { css } from 'styled-components'
+import React, { ChangeEvent } from 'react'
+import styled from 'styled-components'
 
 type Props = {
   name: string
@@ -33,42 +33,45 @@ const StyledSpan = styled.span`
   margin-left: 30px;
 `
 
-const formatValue = (value: any) => {
+const formatValue = (value: any, delimiter = '') => {
   let formattedValue
   if (typeof value === 'string') {
-    formattedValue = <span>{`"${value.trim()}",\r\n`}</span>
+    formattedValue = <span>{`"${value.trim()}"${delimiter}\r\n`}</span>
   } else if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
-    formattedValue = <span>{`${value},\r\n`}</span>
+    formattedValue = <span>{`${value}${delimiter}\r\n`}</span>
   } else if (typeof value === 'object') {
-    formattedValue = beautify(value)
+    formattedValue = <span>{beautify(value, delimiter)}</span>
   }
   return formattedValue
 }
 
-const beautify = (parsedJson?: any): JSX.Element => {
+const beautify = (parsedJson?: any, delimiter = ''): JSX.Element => {
   let formattedJson
   if (Array.isArray(parsedJson)) {
     formattedJson = (
       <>
         <span>{`[\r\n`}</span>
-        {parsedJson.map((item) => formatValue(item))}
-        <span>{`]\r\n`}</span>
+        {parsedJson.map((item, index) => {
+          const delimiter = parsedJson.length - 1 === index ? '' : ','
+          return formatValue(item, delimiter)
+        })}
+        <span>{`]${delimiter}\r\n`}</span>
       </>
     )
   } else if (typeof parsedJson === 'object' && parsedJson !== null) {
     formattedJson = (
       <>
         <span>{`{\r\n`}</span>
-        {Object.entries(parsedJson).map(([key, value]) => {
+        {Object.entries(parsedJson).map(([key, value], index) => {
+          const delimiter = Object.keys(parsedJson).length - 1 === index ? '' : ','
           return (
-            // eslint-disable-next-line react/jsx-key
-            <span>
+            <span key={index}>
               <span>{`"${key}": `}</span>
-              {formatValue(value)}
+              {formatValue(value, delimiter)}
             </span>
           )
         })}
-        <span>{`}\r\n`}</span>
+        <span>{`}${delimiter}\r\n`}</span>
       </>
     )
   }
@@ -76,12 +79,12 @@ const beautify = (parsedJson?: any): JSX.Element => {
   return <span>{formattedJson}</span>
 }
 
-export const ParsedBox = ({ name, parsedJson, onChange, className }: Props): JSX.Element => {
+export const ParsedBox = ({ parsedJson }: Props): JSX.Element => {
   return (
     <Wrap>
-      <StyledPre>
-        <StyledDiv>{beautify(parsedJson)}</StyledDiv>
-      </StyledPre>
+      <StyledDiv>
+        <StyledPre>{beautify(parsedJson)}</StyledPre>
+      </StyledDiv>
     </Wrap>
   )
 }

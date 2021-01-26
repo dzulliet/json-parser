@@ -1,5 +1,37 @@
 .App {
-  text-align: center;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem;
+  min-height: 100vh;
+  background-color: lightblue;
+}
+
+.parser {
+  display: flex;
+  flex-direction: row;
+  min-height: calc(100vh - 8rem);
+  width: 100%;
+}
+
+.parser .textArea {
+  display: flex;
+  justify-content: center;
+  width: 40%;
+}
+
+.parser .controls {
+  display: flex;
+  justify-content: center;
+  width: 20%;
+}
+
+.parser .parsedData {
+  display: flex;
+  justify-content: center;
+  width: 40%;
 }
 
 .App-logo {

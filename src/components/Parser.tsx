@@ -24,8 +24,8 @@ export const Parser = (): JSX.Element => {
   const [jsonOutput, setJsonOutput] = useState('')
 
   const handleParseClick = useCallback(() => {
-    setJsonOutput(JSON.parse(mockJson))
-  }, [])
+    setJsonOutput(JSON.parse(json))
+  }, [json])
   const handleClearClick = useCallback(() => {
     setJson(mockJson)
     setJsonOutput('')

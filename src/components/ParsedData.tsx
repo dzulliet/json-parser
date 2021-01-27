@@ -9,6 +9,10 @@ type Props = {
   className?: string
 }
 
+/**
+ * Container of parsed JSON
+ * @param parsedJson - parsed JSON input, not yet beautified
+ */
 export const ParsedData = ({ parsedJson }: Props): JSX.Element => {
   return (
     <ParsedDataWrap>

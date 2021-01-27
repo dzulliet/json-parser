@@ -8,6 +8,14 @@ type Props = {
   displayCopyButton?: boolean
 }
 
+/**
+ * Wrapper of control buttons used for parsing JSON input, clearing input/output areas
+ * and copying parsed output to clipboard.
+ * @param onParseClick
+ * @param onClearClick
+ * @param onCopyToClipboardClick
+ * @param displayCopyButton
+ */
 export const Controls = ({
   onParseClick,
   onClearClick,

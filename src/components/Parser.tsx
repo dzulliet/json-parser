@@ -4,28 +4,30 @@ import { ParsedData } from './ParsedData'
 import { Controls } from './Controls'
 import { CopyTextArea, Error, ParserWrap, Succes } from './styles'
 
+/**
+ * Component handling user input and basic app layout.
+ */
 export const Parser = (): JSX.Element => {
-  const [json, setJson] = useState('')
-  const handleSetJson = useCallback((e) => setJson(e.target.value), [])
-  const [jsonOutput, setJsonOutput] = useState('')
+  const [jsonInput, setJsonInput] = useState('')
+  const [parsedJsonInput, setParsedJsonInput] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
+  const handleSetJsonInput = useCallback((e) => setJsonInput(e.target.value), [])
   const handleParseClick = useCallback(() => {
     setSuccess('')
     setError('')
-    setJsonOutput('')
+    setParsedJsonInput('')
     try {
-      setJsonOutput(JSON.parse(json))
+      setParsedJsonInput(JSON.parse(jsonInput))
     } catch (e) {
       setError('Invalid JSON')
-      console.log(e)
     }
-  }, [json])
+  }, [jsonInput])
   const handleClearClick = useCallback(() => {
-    setJson('')
-    setJsonOutput('')
+    setJsonInput('')
+    setParsedJsonInput('')
     setSuccess('')
     setError('')
   }, [])
@@ -42,15 +44,16 @@ export const Parser = (): JSX.Element => {
     <ParserWrap>
       {error && <Error>{error}</Error>}
       {success && <Succes>{success}</Succes>}
-      <TextArea name="jsonInput" onChange={handleSetJson} value={json} error={error} />
+      <TextArea name="jsonInput" onChange={handleSetJsonInput} value={jsonInput} />
       <Controls
         onParseClick={handleParseClick}
         onClearClick={handleClearClick}
         onCopyToClipboardClick={handleCopyToClipboard}
-        displayCopyButton={!!jsonOutput}
+        displayCopyButton={!!parsedJsonInput}
       />
-      <ParsedData name="jsonOutput" parsedJson={jsonOutput} />
-      <CopyTextArea ref={textAreaRef} value={JSON.stringify(jsonOutput, null, 4)} readOnly />
+      <ParsedData name="parsedJsonInput" parsedJson={parsedJsonInput} />
+      {/* hidden textarea for 'copy to clipboard' purposes */}
+      <CopyTextArea ref={textAreaRef} value={JSON.stringify(parsedJsonInput, null, 4)} readOnly />
     </ParserWrap>
   )
 }

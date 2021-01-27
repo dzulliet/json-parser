@@ -5,9 +5,13 @@ type Props = {
   name: string
   value?: string
   onChange?: (event: ChangeEvent<HTMLTextAreaElement>) => void
-  error?: string
 }
-
+/**
+ * Component accepting user input
+ * @param name - name of element
+ * @param value - displayed value
+ * @param onChange - ChangeEvent function
+ */
 export const TextArea = ({ name, value, onChange }: Props): JSX.Element => {
   return (
     <TextAreaWrap>

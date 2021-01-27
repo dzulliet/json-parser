@@ -18,6 +18,14 @@ const brackets = {
   object: { left: '{', right: '}' },
 }
 
+/**
+ * Function formatting value to be displayed correctly. Value can be a 'string' which requires to be
+ * closed in double quotation marks, or a 'number', 'boolean' or 'null' which are standalone. Value can
+ * also be and 'object' (which means object or array) and such a value is a node and needs to be
+ * send to recursive component BeautifiedData.
+ * @param value - string, number, boolean, null, object
+ * @param delimiter - if value is not a last element, delimiter is added
+ */
 const formatValue = (value: any, delimiter = ''): string | JSX.Element | undefined => {
   let formattedValue
   if (typeof value === 'string') {
@@ -30,12 +38,19 @@ const formatValue = (value: any, delimiter = ''): string | JSX.Element | undefin
   return formattedValue
 }
 
+/**
+ * Component for cycling through children of a node
+ * @param type - has value of 'array' or 'object' to decide how to process data
+ * @param data
+ */
 const Children = ({ type, data }: ChildrenProps) => {
   const isObject = type === 'object'
-  const dataToMap = isObject ? Object.entries(data) : data
+  const mappableData = isObject ? Object.entries(data) : data
 
-  return dataToMap.map((item: any, index: number) => {
-    const delimiter = dataToMap.length - 1 === index ? '' : ','
+  return mappableData.map((item: any, index: number) => {
+    /* delimiter has value according to if 'item' is a last element in a structure */
+    const delimiter = mappableData.length - 1 === index ? '' : ','
+    /* when mapping object entries 'item' is an array consisting of key and value  */
     const value = isObject ? item[1] : item
     return (
       <IndentedSpan key={index}>
@@ -46,11 +61,17 @@ const Children = ({ type, data }: ChildrenProps) => {
   })
 }
 
+/**
+ * Recursive component for beautifying inputted data
+ * @param data - data to be beautified
+ * @param delimiter - has value when delimiter should be used (last element has no commas)
+ */
 export const BeautifiedData = ({ data, delimiter = '' }: BeautifiedDataProps): JSX.Element | null => {
+  /* state for collapsing/expanding nodes */
   const [displayChildren, setDisplayChildren] = useState(true)
   const toggleDisplayChildren = useCallback(() => setDisplayChildren(!displayChildren), [displayChildren])
   if (data) {
-    const type = Array.isArray(data) ? 'array' : 'object'
+    const type: StructureType = Array.isArray(data) ? 'array' : 'object'
     return (
       <>
         <BracketButtonSpan>

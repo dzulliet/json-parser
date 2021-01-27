@@ -1,22 +1,9 @@
 import React, { useCallback, useState } from 'react'
-import styled from 'styled-components'
 import { TextArea } from './TextArea'
 import { ParsedBox } from './ParsedBox'
 import { Controls } from './Controls'
 import { mockJson } from '../assets/mockJson'
-
-const ParserWrap = styled.div`
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-  flex: 2;
-
-  @media (max-width: 900px) {
-    flex: 0;
-    flex-direction: column;
-    justify-content: flex-start;
-  }
-`
+import { ParserWrap } from './styles'
 
 export const Parser = (): JSX.Element => {
   const [json, setJson] = useState(mockJson)
@@ -27,7 +14,7 @@ export const Parser = (): JSX.Element => {
     setJsonOutput(JSON.parse(json))
   }, [json])
   const handleClearClick = useCallback(() => {
-    setJson(mockJson)
+    setJson(mockJson) //fixme
     setJsonOutput('')
   }, [])
 

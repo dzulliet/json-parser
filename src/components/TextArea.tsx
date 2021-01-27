@@ -1,5 +1,5 @@
 import React, { ChangeEvent } from 'react'
-import { StyledTextArea, TextAreaWrap, Error, Label } from './styles'
+import { StyledTextArea, TextAreaWrap, Label } from './styles'
 
 type Props = {
   name: string
@@ -8,7 +8,7 @@ type Props = {
   error?: string
 }
 
-export const TextArea = ({ name, value, onChange, error }: Props): JSX.Element => {
+export const TextArea = ({ name, value, onChange }: Props): JSX.Element => {
   return (
     <TextAreaWrap>
       <Label>JSON data</Label>

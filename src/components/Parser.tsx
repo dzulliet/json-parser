@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { TextArea } from './TextArea'
-import { ParsedBox } from './ParsedBox'
+import { ParsedData } from './ParsedData'
 import { Controls } from './Controls'
 import { CopyTextArea, Error, ParserWrap, Succes } from './styles'
 
@@ -49,7 +49,7 @@ export const Parser = (): JSX.Element => {
         onCopyToClipboardClick={handleCopyToClipboard}
         displayCopyButton={!!jsonOutput}
       />
-      <ParsedBox name="jsonOutput" parsedJson={jsonOutput} />
+      <ParsedData name="jsonOutput" parsedJson={jsonOutput} />
       <CopyTextArea ref={textAreaRef} value={JSON.stringify(jsonOutput, null, 4)} readOnly />
     </ParserWrap>
   )

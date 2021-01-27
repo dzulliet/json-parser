@@ -1,8 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { TextArea } from './TextArea'
 import { ParsedData } from './ParsedData'
 import { Controls } from './Controls'
-import { CopyTextArea, Error, ParserWrap, Succes } from './styles'
+import { Error, ParserWrap, Succes } from './styles'
 
 /**
  * Component handling user input and basic app layout.
@@ -12,7 +12,6 @@ export const Parser = (): JSX.Element => {
   const [parsedJsonInput, setParsedJsonInput] = useState('')
   const [error, setError] = useState('')
   const [success, setSuccess] = useState('')
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const handleSetJsonInput = useCallback((e) => setJsonInput(e.target.value), [])
   const handleParseClick = useCallback(() => {
@@ -31,14 +30,11 @@ export const Parser = (): JSX.Element => {
     setSuccess('')
     setError('')
   }, [])
-  const handleCopyToClipboard = useCallback(() => {
-    if (textAreaRef && textAreaRef.current) {
-      textAreaRef.current.select()
-      document.execCommand('copy')
-      setError('')
-      setSuccess('Successfully copied to clipboard.')
-    }
-  }, [])
+  const handleCopyToClipboard = useCallback(async () => {
+    await navigator.clipboard.writeText(JSON.stringify(parsedJsonInput, null, 4))
+    setError('')
+    setSuccess('Successfully copied to clipboard.')
+  }, [parsedJsonInput])
 
   return (
     <ParserWrap>
@@ -52,8 +48,6 @@ export const Parser = (): JSX.Element => {
         displayCopyButton={!!parsedJsonInput}
       />
       <ParsedData name="parsedJsonInput" parsedJson={parsedJsonInput} />
-      {/* hidden textarea for 'copy to clipboard' purposes */}
-      <CopyTextArea ref={textAreaRef} value={JSON.stringify(parsedJsonInput, null, 4)} readOnly />
     </ParserWrap>
   )
 }

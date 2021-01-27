@@ -64,3 +64,8 @@ export const IndentedSpan = styled.span`
 export const BracketButtonSpan = styled.span`
   display: inline-flex;
 `
+
+export const CopyTextArea = styled.textarea`
+  display: none;
+  white-space: nowrap;
+`

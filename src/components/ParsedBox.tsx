@@ -1,6 +1,6 @@
 import React, { ChangeEvent } from 'react'
 import { BeautifiedData } from './BeautifiedData'
-import { DataBox, ParsedDataWrap, Pre } from './styles'
+import { DataBox, Label, ParsedDataWrap, Pre, TextAreaWrap } from './styles'
 
 type Props = {
   name: string
@@ -12,6 +12,7 @@ type Props = {
 export const ParsedBox = ({ parsedJson }: Props): JSX.Element => {
   return (
     <ParsedDataWrap>
+      <Label>Formatted JSON data</Label>
       <DataBox>
         <Pre>
           <BeautifiedData data={parsedJson} />

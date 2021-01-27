@@ -2,11 +2,10 @@ import React, { useCallback, useRef, useState } from 'react'
 import { TextArea } from './TextArea'
 import { ParsedBox } from './ParsedBox'
 import { Controls } from './Controls'
-import { mockJson } from '../assets/mockJson'
-import { CopyTextArea, Error, ParserWrap, Succes, TextAreaWrap } from './styles'
+import { CopyTextArea, Error, ParserWrap, Succes } from './styles'
 
 export const Parser = (): JSX.Element => {
-  const [json, setJson] = useState(mockJson)
+  const [json, setJson] = useState('')
   const handleSetJson = useCallback((e) => setJson(e.target.value), [])
   const [jsonOutput, setJsonOutput] = useState('')
   const [error, setError] = useState('')
@@ -14,6 +13,9 @@ export const Parser = (): JSX.Element => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
 
   const handleParseClick = useCallback(() => {
+    setSuccess('')
+    setError('')
+    setJsonOutput('')
     try {
       setJsonOutput(JSON.parse(json))
     } catch (e) {
@@ -22,7 +24,7 @@ export const Parser = (): JSX.Element => {
     }
   }, [json])
   const handleClearClick = useCallback(() => {
-    setJson(mockJson) //fixme
+    setJson('')
     setJsonOutput('')
     setSuccess('')
     setError('')
@@ -31,6 +33,7 @@ export const Parser = (): JSX.Element => {
     if (textAreaRef && textAreaRef.current) {
       textAreaRef.current.select()
       document.execCommand('copy')
+      setError('')
       setSuccess('Successfully copied to clipboard.')
     }
   }, [])

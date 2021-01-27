@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { BracketButtonSpan, IndentedSpan } from './styles'
+import { BracketButtonSpan, CollapsableButton, IndentedSpan } from './styles'
 
 type StructureType = 'array' | 'object'
 
@@ -55,7 +55,7 @@ export const BeautifiedData = ({ data, delimiter = '' }: BeautifiedDataProps): J
       <>
         <BracketButtonSpan>
           {`${brackets[type].left}\r\n`}
-          <button onClick={toggleDisplayChildren}>{displayChildren ? '-' : '+'}</button>
+          <CollapsableButton onClick={toggleDisplayChildren}>{displayChildren ? '-' : '+'}</CollapsableButton>
         </BracketButtonSpan>
         {displayChildren && <Children type={type} data={data} />}
         {`${brackets[type].right}${delimiter}\r\n`}

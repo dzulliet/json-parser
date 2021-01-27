@@ -1,5 +1,5 @@
 import React from 'react'
-import { ControlsWrap } from './styles'
+import { ControlButton, ControlsWrap } from './styles'
 
 type Props = {
   onParseClick: () => void
@@ -16,9 +16,9 @@ export const Controls = ({
 }: Props): JSX.Element => {
   return (
     <ControlsWrap>
-      <button onClick={onParseClick}>parse</button>
-      <button onClick={onClearClick}>clear</button>
-      {displayCopyButton && <button onClick={onCopyToClipboardClick}>copy to clipboard</button>}
+      <ControlButton onClick={onParseClick}>parse</ControlButton>
+      <ControlButton onClick={onClearClick}>clear</ControlButton>
+      {displayCopyButton && <ControlButton onClick={onCopyToClipboardClick}>copy to clipboard</ControlButton>}
     </ControlsWrap>
   )
 }

@@ -1,4 +1,4 @@
-import React, { ChangeEvent } from 'react'
+import React, { ChangeEvent, useCallback, useState } from 'react'
 import styled from 'styled-components'
 
 type Props = {
@@ -45,6 +45,9 @@ const IndentedSpan = styled.span`
   display: block;
   padding-left: 30px;
 `
+const BracketButtonSpan = styled.span`
+  display: inline-flex;
+`
 
 const formatValue = (value: any, delimiter = ''): string | JSX.Element | undefined => {
   let formattedValue
@@ -79,13 +82,17 @@ const Children = ({ type, data }: ChildrenProps) => {
 }
 
 const BeautifiedData = ({ data, delimiter = '' }: BeautifiedDataProps): JSX.Element | null => {
+  const [displayChildren, setDisplayChildren] = useState(true)
+  const toggleDisplayChildren = useCallback(() => setDisplayChildren(!displayChildren), [displayChildren])
   if (data) {
     const type = Array.isArray(data) ? 'array' : 'object'
     return (
       <>
-        {`${brackets[type].left}\r\n`}
-        <button>+/-</button>
-        <Children type={type} data={data} />
+        <BracketButtonSpan>
+          {`${brackets[type].left}\r\n`}
+          <button onClick={toggleDisplayChildren}>{displayChildren ? '-' : '+'}</button>
+        </BracketButtonSpan>
+        {displayChildren && <Children type={type} data={data} />}
         {`${brackets[type].right}${delimiter}\r\n`}
       </>
     )

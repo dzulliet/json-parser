@@ -8,6 +8,18 @@ type Props = {
   className?: string
 }
 
+type StructureType = 'array' | 'object'
+
+type BeautifiedDataProps = {
+  data?: any
+  delimiter?: string
+}
+
+type ChildrenProps = {
+  type: StructureType
+  data: any
+}
+
 const Wrap = styled.div`
   padding: 1rem;
   flex: 3;
@@ -34,57 +46,60 @@ const IndentedSpan = styled.span`
   padding-left: 30px;
 `
 
-const formatValue = (value: any, delimiter = '') => {
+const formatValue = (value: any, delimiter = ''): string | JSX.Element | undefined => {
   let formattedValue
   if (typeof value === 'string') {
     formattedValue = `"${value.trim()}"${delimiter}\r\n`
   } else if (typeof value === 'number' || typeof value === 'boolean' || value === null) {
     formattedValue = `${value}${delimiter}\r\n`
   } else if (typeof value === 'object') {
-    formattedValue = beautify(value, delimiter)
+    formattedValue = <BeautifiedData data={value} delimiter={delimiter} />
   }
   return formattedValue
 }
 
-const beautify = (parsedJson?: any, delimiter = ''): JSX.Element => {
-  let formattedJson
-  if (Array.isArray(parsedJson)) {
-    formattedJson = (
-      <>
-        {`[\r\n`}
-        {parsedJson.map((item, index) => {
-          const delimiter = parsedJson.length - 1 === index ? '' : ','
-          return <IndentedSpan key={index}>{formatValue(item, delimiter)}</IndentedSpan>
-        })}
-        {`]${delimiter}\r\n`}
-      </>
+const brackets = {
+  array: { left: '[', right: ']' },
+  object: { left: '{', right: '}' },
+}
+const Children = ({ type, data }: ChildrenProps) => {
+  const isObject = type === 'object'
+  const dataToMap = isObject ? Object.entries(data) : data
+
+  return dataToMap.map((item: any, index: number) => {
+    const delimiter = dataToMap.length - 1 === index ? '' : ','
+    const value = isObject ? item[1] : item
+    return (
+      <IndentedSpan key={index}>
+        {isObject ? `"${item[0]}": ` : ''}
+        {formatValue(value, delimiter)}
+      </IndentedSpan>
     )
-  } else if (typeof parsedJson === 'object' && parsedJson !== null) {
-    formattedJson = (
+  })
+}
+
+const BeautifiedData = ({ data, delimiter = '' }: BeautifiedDataProps): JSX.Element | null => {
+  if (data) {
+    const type = Array.isArray(data) ? 'array' : 'object'
+    return (
       <>
-        {`{\r\n`}
-        {Object.entries(parsedJson).map(([key, value], index) => {
-          const delimiter = Object.keys(parsedJson).length - 1 === index ? '' : ','
-          return (
-            <IndentedSpan key={index}>
-              {`"${key}": `}
-              {formatValue(value, delimiter)}
-            </IndentedSpan>
-          )
-        })}
-        {`}${delimiter}\r\n`}
+        {`${brackets[type].left}\r\n`}
+        <button>+/-</button>
+        <Children type={type} data={data} />
+        {`${brackets[type].right}${delimiter}\r\n`}
       </>
     )
   }
-
-  return <>{formattedJson}</>
+  return null
 }
 
 export const ParsedBox = ({ parsedJson }: Props): JSX.Element => {
   return (
     <Wrap>
       <DataBox>
-        <Pre>{beautify(parsedJson)}</Pre>
+        <Pre>
+          <BeautifiedData data={parsedJson} />
+        </Pre>
       </DataBox>
     </Wrap>
   )
